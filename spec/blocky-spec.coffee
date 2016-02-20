@@ -8,6 +8,8 @@ Blocky = require '../lib/blocky'
 # To run a specific `it` or `describe` block add an `f` to the front (e.g. `fit`
 # or `fdescribe`). Remove the `f` to unfocus the block.
 
+# ^class\s|\sclass\s
+
 describe "Blocky", ->
   [workspaceElement, activationPromise] = []
   [editor, editorView] = []
@@ -22,16 +24,19 @@ describe "Blocky", ->
     atom.project.setPaths([projectPath])
 
     waitsForPromise ->
+      console.log "activate!!"
       atom.workspace.open(path.join(projectPath, 'simple.rb'))
 
     runs ->
       editor = atom.workspace.getActiveTextEditor()
       editorView = atom.views.getView(editor)
 
-    # waitsForPromise ->
-    #   atom.packages.activatePackage('blocky')
+    waitsForPromise ->
+      atom.packages.activatePackage("language-ruby")
 
-    atom.commands.dispatch workspaceElement, 'blocky:toggle'
+    runs ->
+      atom.packages.activatePackage('blocky')
+      atom.commands.dispatch workspaceElement, 'blocky:toggle'
 
     waitsForPromise ->
       activationPromise
