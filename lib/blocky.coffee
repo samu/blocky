@@ -20,9 +20,9 @@ module.exports = Blocky =
   subscriptions: null
 
   activate: (state) ->
-    grammar = atom.grammars.grammarForScopeName("source.ruby")
-    console.log grammar
-    console.log "HEREERER"
+    # grammar = atom.grammars.grammarForScopeName("source.ruby")
+    # console.log grammar
+    # console.log "HEREERER"
     atom.workspace.observeTextEditors (editor) ->
       # console.log blockStartRegexes
 
@@ -31,26 +31,30 @@ module.exports = Blocky =
       # console.log hg.registry#.selectGrammar(editor.getPath(), editor.getText())
 
       # grammar = atom.grammars.selectGrammar(editor.getPath(), editor.getText())
+
+      grammar = editor.getGrammar()
+
       console.log "GRAMMAR:", grammar
       ruleStack = null
       for n in [0..editor.getLineCount()]
         line = editor.lineTextForBufferRow(n)
+
         if line
           result = grammar.tokenizeLine(line, ruleStack, ruleStack == null)
           ruleStack = result.ruleStack
-          console.log result.tags
-          console.log result.tokens
 
-          console.log "--------"
-          tags = result.tags
-          for tag in tags
-            scope = atom.grammars.scopeForId(tag)
-            console.log scope
-          console.log "--------"
-
-      # debugger
-
-      # console.log "grammar:", grammar
+          for token in result.tokens
+            for scope in token.scopes
+              if scope.indexOf("keyword") >= 0
+                if token.value.indexOf("if") >= 0
+                  console.log "---- found an if"
+                  if token.value.test(/\s+if/)
+                    console.log "its a one liner!"
+                  else
+                    console.log "its a multi liner!"
+                  console.log "--------"
+                else
+                console.log token.value
 
       # line = grammar.tokenizeLine("#id { color: black; }")
       # lines = grammar.tokenizeLines(editor.getPath(), editor.getText())
