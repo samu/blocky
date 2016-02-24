@@ -26,14 +26,16 @@ describe "Blocky", ->
     waitsForPromise ->
       console.log "activate!!"
       atom.workspace.open(path.join(projectPath, 'simple.rb'))
+
+    runs ->
+      editor = atom.workspace.getActiveTextEditor()
+      editorView = atom.views.getView(editor)
+
     waitsForPromise ->
       atom.packages.activatePackage("language-ruby")
     # waitsForPromise ->
     #   activationPromise
 
-    # runs ->
-    #   editor = atom.workspace.getActiveTextEditor()
-    #   editorView = atom.views.getView(editor)
     #   atom.commands.dispatch workspaceElement, 'blocky:toggle'
 
     # waitsForPromise ->
@@ -44,7 +46,7 @@ describe "Blocky", ->
 
   describe "Unit tests", ->
     it "does stuff", ->
-
+      Blocky.methodUnderTest()
 
       # runs ->
       # Blocky.methodUnderTest()

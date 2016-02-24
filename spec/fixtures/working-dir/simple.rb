@@ -1,18 +1,1099 @@
 module Abc
   class A
     def test
-      puts %{blabla
-        def
-          puts 'abc'
-        end
-      }
+      if true
+        begin
+          "Abc
+          begin
 
-      puts "yo" if true
+          end"
+
+        rescue
+
+        end
+      elsif blaub
+
+      else
+      end
     end
   end
+end
+module Abc
+  class A
+    def test
+      if true
+        begin
+          "Abc
+          begin
 
-  class B
-    def blapp
+          end"
+
+        rescue
+        rescue
+
+        end
+      elsif blaub
+
+      else
+      end
+    end
+  end
+end
+module Abc
+  class A
+    def test
+      if true
+        begin
+          "Abc
+          begin
+
+          end"
+
+        rescue
+
+        end
+      elsif blaub
+
+      else
+      end
+    end
+  end
+end
+module Abc
+  class A
+    def test
+      if true
+        begin
+          "Abc
+          begin
+
+          end"
+
+        rescue
+
+        end
+      elsif blaub
+
+      else
+      end
+    end
+  end
+end
+module Abc
+  class A
+    def test
+      if true
+        begin
+          "Abc
+          begin
+
+          end"
+
+        rescue
+
+        end
+      elsif blaub
+
+      else
+      end
+    end
+  end
+end
+module Abc
+  class A
+    def test
+      if true
+        begin
+          "Abc
+          begin
+
+          end"
+
+        rescue
+
+        end
+      elsif blaub
+
+      else
+      end
+    end
+  end
+end
+module Abc
+  class A
+    def test
+      if true
+        begin
+          "Abc
+          begin
+
+          end"
+
+        rescue
+
+        end
+      elsif blaub
+
+      else
+      end
+    end
+  end
+end
+module Abc
+  class A
+    def test
+      if true
+        begin
+          "Abc
+          begin
+
+          end"
+
+        rescue
+
+        end
+      elsif blaub
+
+      else
+      end
+    end
+  end
+end
+module Abc
+  class A
+    def test
+      if true
+        begin
+          "Abc
+          begin
+
+          end"
+
+        rescue
+
+        end
+      elsif blaub
+
+      else
+      end
+    end
+  end
+end
+module Abc
+  class A
+    def test
+      if true
+        begin
+          "Abc
+          begin
+
+          end"
+
+        rescue
+
+        end
+      elsif blaub
+
+      else
+      end
+    end
+  end
+end
+module Abc
+  class A
+    def test
+      if true
+        begin
+          "Abc
+          begin
+
+          end"
+
+        rescue
+
+        end
+      elsif blaub
+
+      else
+      end
+    end
+  end
+end
+module Abc
+  class A
+    def test
+      if true
+        begin
+          "Abc
+          begin
+
+          end"
+
+        rescue
+
+        end
+      elsif blaub
+
+      else
+      end
+    end
+  end
+end
+module Abc
+  class A
+    def test
+      if true
+        begin
+          "Abc
+          begin
+
+          end"
+
+        rescue
+
+        end
+      elsif blaub
+
+      else
+      end
+    end
+  end
+end
+module Abc
+  class A
+    def test
+      if true
+        begin
+          "Abc
+          begin
+
+          end"
+
+        rescue
+
+        end
+      elsif blaub
+
+      else
+      end
+    end
+  end
+end
+module Abc
+  class A
+    def test
+      if true
+        begin
+          "Abc
+          begin
+
+          end"
+
+        rescue
+
+        end
+      elsif blaub
+
+      else
+      end
+    end
+  end
+end
+module Abc
+  class A
+    def test
+      if true
+        begin
+          "Abc
+          begin
+
+          end"
+
+        rescue
+
+        end
+      elsif blaub
+
+      else
+      end
+    end
+  end
+end
+module Abc
+  class A
+    def test
+      if true
+        begin
+          "Abc
+          begin
+
+          end"
+
+        rescue
+
+        end
+      elsif blaub
+
+      else
+      end
+    end
+  end
+end
+module Abc
+  class A
+    def test
+      if true
+        begin
+          "Abc
+          begin
+
+          end"
+
+        rescue
+
+        end
+      elsif blaub
+
+      else
+      end
+    end
+  end
+end
+module Abc
+  class A
+    def test
+      if true
+        begin
+          "Abc
+          begin
+
+          end"
+        rescue
+
+        end
+      elsif blaub
+
+      else
+      end
+    end
+  end
+end
+module Abc
+  class A
+    def test
+      if true
+        begin
+          "Abc
+          begin
+
+          end"
+
+        rescue
+
+        end
+      elsif blaub
+
+      else
+      end
+    end
+  end
+end
+module Abc
+  class A
+    def test
+      if true
+        begin
+          "Abc
+          begin
+
+          end"
+
+        rescue
+
+        end
+      elsif blaub
+
+      else
+      end
+    end
+  end
+end
+module Abc
+  class A
+    def test
+      if true
+        begin
+          "Abc
+          begin
+
+          end"
+
+        rescue
+
+        end
+      elsif blaub
+
+      else
+      end
+    end
+  end
+end
+module Abc
+  class A
+    def test
+      if true
+        begin
+          "Abc
+          begin
+
+          end"
+
+        rescue
+
+        end
+      elsif blaub
+
+      else
+      end
+    end
+  end
+end
+module Abc
+  class A
+    def test
+      if true
+        begin
+          "Abc
+          begin
+
+          end"
+
+        rescue
+
+        end
+      elsif blaub
+
+      else
+      end
+    end
+  end
+end
+module Abc
+  class A
+    def test
+      if true
+        begin
+          "Abc
+          begin
+
+          end"
+
+        rescue
+
+        end
+      elsif blaub
+
+      else
+      end
+    end
+  end
+end
+module Abc
+  class A
+    def test
+      if true
+        begin
+          "Abc
+          begin
+
+          end"
+
+        rescue
+
+        end
+      elsif blaub
+
+      else
+      end
+    end
+  end
+end
+module Abc
+  class A
+    def test
+      if true
+        begin
+          "Abc
+          begin
+
+          end"
+
+        rescue
+
+        end
+      elsif blaub
+
+      else
+      end
+    end
+  end
+end
+module Abc
+  class A
+    def test
+      if true
+        begin
+          "Abc
+          begin
+
+          end"
+
+        rescue
+
+        end
+      elsif blaub
+
+      else
+      end
+    end
+  end
+end
+module Abc
+  class A
+    def test
+      if true
+        begin
+          "Abc
+          begin
+
+          end"
+
+        rescue
+
+        end
+      elsif blaub
+
+      else
+      end
+    end
+  end
+end
+module Abc
+  class A
+    def test
+      if true
+        begin
+          "Abc
+          begin
+
+          end"
+
+        rescue
+
+        end
+      elsif blaub
+
+      else
+      end
+    end
+  end
+end
+module Abc
+  class A
+    def test
+      if true
+        begin
+          "Abc
+          begin
+
+          end"
+
+        rescue
+
+        end
+      elsif blaub
+
+      else
+      end
+    end
+  end
+end
+module Abc
+  class A
+    def test
+      if true
+        begin
+          "Abc
+          begin
+
+          end"
+
+        rescue
+
+        end
+      elsif blaub
+
+      else
+      end
+    end
+  end
+end
+module Abc
+  class A
+    def test
+      if true
+        begin
+          "Abc
+          begin
+
+          end"
+
+        rescue
+
+        end
+      elsif blaub
+
+      else
+      end
+    end
+  end
+end
+module Abc
+  class A
+    def test
+      if true
+        begin
+          "Abc
+          begin
+
+          end"
+
+        rescue
+
+        end
+      elsif blaub
+
+      else
+      end
+    end
+  end
+end
+module Abc
+  class A
+    def test
+      if true
+        begin
+          "Abc
+          begin
+
+          end"
+
+        rescue
+
+        end
+      elsif blaub
+
+      else
+      end
+    end
+  end
+end
+module Abc
+  class A
+    def test
+      if true
+        begin
+          "Abc
+          begin
+
+          end"
+
+        rescue
+
+        end
+      elsif blaub
+
+      else
+      end
+    end
+  end
+end
+module Abc
+  class A
+    def test
+      if true
+        begin
+          "Abc
+          begin
+
+          end"
+
+        rescue
+
+        end
+      elsif blaub
+
+      else
+      end
+    end
+  end
+end
+module Abc
+  class A
+    def test
+      if true
+        begin
+          "Abc
+          begin
+
+          end"
+
+        rescue
+
+        end
+      elsif blaub
+
+      else
+      end
+    end
+  end
+end
+module Abc
+  class A
+    def test
+      if true
+        begin
+          "Abc
+          begin
+
+          end"
+
+        rescue
+
+        end
+      elsif blaub
+
+      else
+      end
+    end
+  end
+end
+module Abc
+  class A
+    def test
+      if true
+        begin
+          "Abc
+          begin
+
+          end"
+
+        rescue
+
+        end
+      elsif blaub
+
+      else
+      end
+    end
+  end
+end
+module Abc
+  class A
+    def test
+      if true
+        begin
+          "Abc
+          begin
+
+          end"
+
+        rescue
+
+        end
+      elsif blaub
+
+      else
+      end
+    end
+  end
+end
+module Abc
+  class A
+    def test
+      if true
+        begin
+          "Abc
+          begin
+
+          end"
+
+        rescue
+
+        end
+      elsif blaub
+
+      else
+      end
+    end
+  end
+end
+module Abc
+  class A
+    def test
+      if true
+        begin
+          "Abc
+          begin
+
+          end"
+
+        rescue
+
+        end
+      elsif blaub
+
+      else
+      end
+    end
+  end
+end
+module Abc
+  class A
+    def test
+      if true
+        begin
+          "Abc
+          begin
+
+          end"
+
+        rescue
+
+        end
+      elsif blaub
+
+      else
+      end
+    end
+  end
+end
+module Abc
+  class A
+    def test
+      if true
+        begin
+          "Abc
+          begin
+
+          end"
+
+        rescue
+
+        end
+      elsif blaub
+
+      else
+      end
+    end
+  end
+end
+module Abc
+  class A
+    def test
+      if true
+        begin
+          "Abc
+          begin
+
+          end"
+
+        rescue
+
+        end
+      elsif blaub
+
+      else
+      end
+    end
+  end
+end
+module Abc
+  class A
+    def test
+      if true
+        begin
+          "Abc
+          begin
+
+          end"
+
+        rescue
+
+        end
+      elsif blaub
+
+      else
+      end
+    end
+  end
+end
+module Abc
+  class A
+    def test
+      if true
+        begin
+          "Abc
+          begin
+
+          end"
+
+        rescue
+
+        end
+      elsif blaub
+
+      else
+      end
+    end
+  end
+end
+module Abc
+  class A
+    def test
+      if true
+        begin
+          "Abc
+          begin
+
+          end"
+
+        rescue
+
+        end
+      elsif blaub
+
+      else
+      end
+    end
+  end
+end
+module Abc
+  class A
+    def test
+      if true
+        begin
+          "Abc
+          begin
+
+          end"
+
+        rescue
+
+        end
+      elsif blaub
+
+      else
+      end
+    end
+  end
+end
+module Abc
+  class A
+    def test
+      if true
+        begin
+          "Abc
+          begin
+
+          end"
+
+        rescue
+
+        end
+      elsif blaub
+
+      else
+      end
+    end
+  end
+end
+module Abc
+  class A
+    def test
+      if true
+        begin
+          "Abc
+          begin
+
+          end"
+
+        rescue
+
+        end
+      elsif blaub
+
+      else
+      end
+    end
+  end
+end
+module Abc
+  class A
+    def test
+      if true
+        begin
+          "Abc
+          begin
+
+          end"
+
+        rescue
+
+        end
+      elsif blaub
+
+      else
+      end
+    end
+  end
+end
+module Abc
+  class A
+    def test
+      if true
+        begin
+          "Abc
+          begin
+
+          end"
+
+        rescue
+
+        end
+      elsif blaub
+
+      else
+      end
+    end
+  end
+end
+module Abc
+  class A
+    def test
+      if true
+        begin
+          "Abc
+          begin
+
+          end"
+        rescue
+
+        end
+      elsif blaub
+
+      else
+      end
     end
   end
 end
