@@ -30,22 +30,22 @@ describe "Blocky", ->
 
     it "finds block structures", ->
       expect(_.keys(map).length).toBe 5
-      expect(map[0].parameters.keyword).toBe "class"
-      expect(map[1].parameters.keyword).toBe "def"
-      expect(map[3].parameters.keyword).toBe "rescue"
-      expect(map[5].parameters.keyword).toBe "end"
-      expect(map[6].parameters.keyword).toBe "end"
+      expect(map[0][0].parameters.keyword).toBe "class"
+      expect(map[1][2].parameters.keyword).toBe "def"
+      expect(map[3][2].parameters.keyword).toBe "rescue"
+      expect(map[5][2].parameters.keyword).toBe "end"
+      expect(map[6][0].parameters.keyword).toBe "end"
 
     it "knows the appendants for every code block", ->
-      expect(map[0].appendants.length).toBe 1
-      expect(map[0].appendants[0]).toBe 6
+      expect(map[0][0].appendants.length).toBe 1
+      expect(map[0][0].appendants[0]).toEqual [6,0]
 
-      expect(map[1].appendants.length).toBe 2
-      expect(map[1].appendants[0]).toBe 5
-      expect(map[1].appendants[1]).toBe 3
+      expect(map[1][2].appendants.length).toBe 2
+      expect(map[1][2].appendants[0]).toEqual [5,2]
+      expect(map[1][2].appendants[1]).toEqual [3,2]
 
-      expect(map[6].appendants.length).toBe 1
-      expect(map[6].appendants[0]).toBe 0
+      expect(map[6][0].appendants.length).toBe 1
+      expect(map[6][0].appendants[0]).toEqual [0,0]
 
   describe "malformed cases", ->
     describe "when there are too many end keywords", ->
@@ -69,9 +69,9 @@ describe "Blocky", ->
 
       it "finds them", ->
         expect(_.keys(map).length).toBe 2
-        expect(map[0].parameters.keyword).toBe "if"
+        expect(map[0][0].parameters.keyword).toBe "if"
         expect(map[1]).toBe undefined
-        expect(map[2].parameters.keyword).toBe "end"
+        expect(map[2][0].parameters.keyword).toBe "end"
 
     describe "one-line if", ->
       beforeEach ->
@@ -79,6 +79,6 @@ describe "Blocky", ->
 
       it "ignores them", ->
         expect(_.keys(map).length).toBe 2
-        expect(map[0].parameters.keyword).toBe "begin"
+        expect(map[0][0].parameters.keyword).toBe "begin"
         expect(map[1]).toBe undefined
-        expect(map[2].parameters.keyword).toBe "end"
+        expect(map[2][0].parameters.keyword).toBe "end"

@@ -40,9 +40,11 @@ module.exports = Blocky =
     console.log "scrolling!"
     marker.destroy() for marker in @markers
     cursorPosition = @editor.getCursorBufferPosition()
-    entry = @blockMap[cursorPosition.row]
-    if entry
-      @decorateKeyword(entry.parameters.lineNumber, entry.parameters.position, entry.parameters.length)
-      for lineNo in entry.appendants
-        appendant = @blockMap[lineNo]
-        @decorateKeyword(appendant.parameters.lineNumber, appendant.parameters.position, appendant.parameters.length)
+    entries = @blockMap[cursorPosition.row]
+    if entries
+      for entry in entries
+        if entry
+          @decorateKeyword(entry.parameters.lineNumber, entry.parameters.position, entry.parameters.length)
+          for [lineNumber, column] in entry.appendants
+            appendant = @blockMap[lineNumber][column]
+            @decorateKeyword(appendant.parameters.lineNumber, appendant.parameters.position, appendant.parameters.length)

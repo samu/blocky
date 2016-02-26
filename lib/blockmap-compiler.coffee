@@ -11,13 +11,16 @@ class Parameters
 
 class BlockMap
   constructor: ->
-    @map = {}
+    @map = []
 
   push: (block) ->
-    @map[block.begin.lineNumber] = {parameters: block.begin, appendants: block.getAppendants(block.begin.lineNumber)}
+    @entryAt(block.begin.lineNumber)[block.begin.position] = {parameters: block.begin, appendants: block.getAppendants(block.begin.lineNumber)}
     for inbetween in block.inbetweens
-      @map[inbetween.lineNumber] = {parameters: inbetween, appendants: block.getAppendants(inbetween.lineNumber)}
-    @map[block.end.lineNumber] = {parameters: block.end, appendants: block.getAppendants(block.end.lineNumber)}
+      @entryAt(inbetween.lineNumber)[inbetween.position] = {parameters: inbetween, appendants: block.getAppendants(inbetween.lineNumber)}
+    @entryAt(block.end.lineNumber)[block.end.position] = {parameters: block.end, appendants: block.getAppendants(block.end.lineNumber)}
+
+  entryAt: (lineNumber) ->
+    @map[lineNumber] ||= []
 
 class Block
   constructor: (@begin) ->
@@ -31,10 +34,10 @@ class Block
 
   getAppendants: (skip) ->
     appendants = []
-    appendants.push(@begin.lineNumber) unless skip is @begin.lineNumber
-    appendants.push(@end.lineNumber)  unless skip is @end.lineNumber
+    appendants.push([@begin.lineNumber, @begin.position]) unless skip is @begin.lineNumber
+    appendants.push([@end.lineNumber, @end.position])  unless skip is @end.lineNumber
     for inbetween in @inbetweens
-      appendants.push(inbetween.lineNumber) unless skip is inbetween.lineNumber
+      appendants.push([inbetween.lineNumber, inbetween.position]) unless skip is inbetween.lineNumber
     return appendants
 
 class Stack
