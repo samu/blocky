@@ -9,18 +9,24 @@ describe "Blocky", ->
   # [workspaceElement, activationPromise] = []
   [editor, editorView, map] = []
 
+  prepare = (fileName) ->
+    waitsForPromise ->
+      atom.workspace.open(fileName)
+    runs ->
+      editor = atom.workspace.getActiveTextEditor()
+      lines = editor.displayBuffer.tokenizedBuffer.tokenizedLines
+      map = compile(lines)
+
+  beforeEach ->
+    [editor, editorView, map] = []
+
   beforeEach ->
     waitsForPromise ->
       atom.packages.activatePackage("language-ruby")
 
   describe "basic case", ->
     beforeEach ->
-      waitsForPromise ->
-        atom.workspace.open('basic.rb')
-      runs ->
-        editor = atom.workspace.getActiveTextEditor()
-        lines = editor.displayBuffer.tokenizedBuffer.tokenizedLines
-        map = compile(lines)
+      prepare('basic.rb')
 
     it "finds block structures", ->
       expect(_.keys(map).length).toBe 5
@@ -43,19 +49,36 @@ describe "Blocky", ->
 
   describe "malformed cases", ->
     describe "when there are too many end keywords", ->
+      beforeEach ->
+        prepare('too-many-end-keywords.rb')
+
       it "doesnt throw errors if it cant match all pairs", ->
-        waitsForPromise ->
-          atom.workspace.open('too-many-end-keywords.rb')
-        runs ->
-          editor = atom.workspace.getActiveTextEditor()
-          lines = editor.displayBuffer.tokenizedBuffer.tokenizedLines
-          map = compile(lines)
+        expect(map).toBeDefined()
 
     describe "when there are not enough end keywords", ->
+      beforeEach ->
+        prepare('not-enough-end-keywords.rb')
+
       it "doesnt throw errors if it cant match all pairs", ->
-        waitsForPromise ->
-          atom.workspace.open('not-enough-end-keywords.rb')
-        runs ->
-          editor = atom.workspace.getActiveTextEditor()
-          lines = editor.displayBuffer.tokenizedBuffer.tokenizedLines
-          map = compile(lines)
+        expect(map).toBeDefined()
+
+  describe "if statements", ->
+    describe "basic if", ->
+      beforeEach ->
+        prepare('basic-if.rb')
+
+      it "finds them", ->
+        expect(_.keys(map).length).toBe 2
+        expect(map[0].parameters.keyword).toBe "if"
+        expect(map[1]).toBe undefined
+        expect(map[2].parameters.keyword).toBe "end"
+
+    describe "one-line if", ->
+      beforeEach ->
+        prepare('one-line-if.rb')
+
+      it "ignores them", ->
+        expect(_.keys(map).length).toBe 2
+        expect(map[0].parameters.keyword).toBe "begin"
+        expect(map[1]).toBe undefined
+        expect(map[2].parameters.keyword).toBe "end"
