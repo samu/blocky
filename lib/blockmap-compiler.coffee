@@ -45,15 +45,18 @@ class Stack
     # this tests the inbetweens first, because of the if that also appears in elsif
     # maybe this should be done with a more specific regex
     if inbetweenKeywords.test(parameters.keyword)
-      @stack[@stack.length-1].pushInbetween(parameters)
+      @getTop()?.pushInbetween(parameters)
 
     else if openKeywords.test(parameters.keyword)
       @stack.push(new Block(parameters))
 
     else if endKeywords.test(parameters.keyword)
-      @stack[@stack.length-1].pushEnd(parameters)
+      @getTop()?.pushEnd(parameters)
       block = @stack.pop()
-      @blockMap.push(block)
+      @blockMap.push(block) if block
+
+  getTop: ->
+    @stack[@stack.length-1]
 
 getPositionAndLength = (tags, index) ->
   counter = 0

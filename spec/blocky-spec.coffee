@@ -1,101 +1,61 @@
 path = require 'path'
 fs = require 'fs-plus'
 temp = require 'temp'
+_ = require 'underscore-plus'
 Blocky = require '../lib/blocky'
-
-# Use the command `window:run-package-specs` (cmd-alt-ctrl-p) to run specs.
-#
-# To run a specific `it` or `describe` block add an `f` to the front (e.g. `fit`
-# or `fdescribe`). Remove the `f` to unfocus the block.
-
-# ^class\s|\sclass\s
+compile = require '../lib/blockmap-compiler'
 
 describe "Blocky", ->
-  [workspaceElement, activationPromise] = []
-  [editor, editorView] = []
+  # [workspaceElement, activationPromise] = []
+  [editor, editorView, map] = []
 
   beforeEach ->
-    workspaceElement = atom.views.getView(atom.workspace)
-    activationPromise = atom.packages.activatePackage('blocky')
-
-    projectPath = temp.mkdirSync('git-diff-spec-')
-
-    fs.copySync(path.join(__dirname, 'fixtures', 'working-dir'), projectPath)
-    atom.project.setPaths([projectPath])
-
-    waitsForPromise ->
-      console.log "activate!!"
-      atom.workspace.open(path.join(projectPath, 'simple.rb'))
-
-    runs ->
-      editor = atom.workspace.getActiveTextEditor()
-      editorView = atom.views.getView(editor)
-
     waitsForPromise ->
       atom.packages.activatePackage("language-ruby")
-    # waitsForPromise ->
-    #   activationPromise
 
-    #   atom.commands.dispatch workspaceElement, 'blocky:toggle'
+  describe "basic case", ->
+    beforeEach ->
+      waitsForPromise ->
+        atom.workspace.open('basic.rb')
+      runs ->
+        editor = atom.workspace.getActiveTextEditor()
+        lines = editor.displayBuffer.tokenizedBuffer.tokenizedLines
+        map = compile(lines)
 
-    # waitsForPromise ->
-    #   atom.packages.activatePackage('blocky')
+    it "finds block structures", ->
+      expect(_.keys(map).length).toBe 5
+      expect(map[0].parameters.keyword).toBe "class"
+      expect(map[1].parameters.keyword).toBe "def"
+      expect(map[3].parameters.keyword).toBe "rescue"
+      expect(map[5].parameters.keyword).toBe "end"
+      expect(map[6].parameters.keyword).toBe "end"
 
-    runs ->
-      atom.commands.dispatch workspaceElement, 'blocky:toggle'
+    it "knows the appendants for every code block", ->
+      expect(map[0].appendants.length).toBe 1
+      expect(map[0].appendants[0]).toBe 6
 
-  describe "Unit tests", ->
-    it "does stuff", ->
-      Blocky.methodUnderTest()
+      expect(map[1].appendants.length).toBe 2
+      expect(map[1].appendants[0]).toBe 5
+      expect(map[1].appendants[1]).toBe 3
 
-      # runs ->
-      # Blocky.methodUnderTest()
+      expect(map[6].appendants.length).toBe 1
+      expect(map[6].appendants[0]).toBe 0
 
-  # describe "when the blocky:toggle event is triggered", ->
-  #   it "hides and shows the modal panel", ->
-  #     # Before the activation event the view is not on the DOM, and no panel
-  #     # has been created
-  #     expect(workspaceElement.querySelector('.blocky')).not.toExist()
-  #
-  #     # This is an activation event, triggering it will cause the package to be
-  #     # activated.
-  #     atom.commands.dispatch workspaceElement, 'blocky:toggle'
-  #
-  #     waitsForPromise ->
-  #       activationPromise
-  #
-  #     runs ->
-  #       expect(workspaceElement.querySelector('.blocky')).toExist()
-  #
-  #       blockyElement = workspaceElement.querySelector('.blocky')
-  #       expect(blockyElement).toExist()
-  #
-  #       blockyPanel = atom.workspace.panelForItem(blockyElement)
-  #       expect(blockyPanel.isVisible()).toBe true
-  #       atom.commands.dispatch workspaceElement, 'blocky:toggle'
-  #       expect(blockyPanel.isVisible()).toBe false
-  #
-  #   it "hides and shows the view", ->
-  #     # This test shows you an integration test testing at the view level.
-  #
-  #     # Attaching the workspaceElement to the DOM is required to allow the
-  #     # `toBeVisible()` matchers to work. Anything testing visibility or focus
-  #     # requires that the workspaceElement is on the DOM. Tests that attach the
-  #     # workspaceElement to the DOM are generally slower than those off DOM.
-  #     jasmine.attachToDOM(workspaceElement)
-  #
-  #     expect(workspaceElement.querySelector('.blocky')).not.toExist()
-  #
-  #     # This is an activation event, triggering it causes the package to be
-  #     # activated.
-  #     atom.commands.dispatch workspaceElement, 'blocky:toggle'
-  #
-  #     waitsForPromise ->
-  #       activationPromise
-  #
-  #     runs ->
-  #       # Now we can test for view visibility
-  #       blockyElement = workspaceElement.querySelector('.blocky')
-  #       expect(blockyElement).toBeVisible()
-  #       atom.commands.dispatch workspaceElement, 'blocky:toggle'
-  #       expect(blockyElement).not.toBeVisible()
+  describe "malformed cases", ->
+    describe "when there are too many end keywords", ->
+      it "doesnt throw errors if it cant match all pairs", ->
+        waitsForPromise ->
+          atom.workspace.open('too-many-end-keywords.rb')
+        runs ->
+          editor = atom.workspace.getActiveTextEditor()
+          lines = editor.displayBuffer.tokenizedBuffer.tokenizedLines
+          map = compile(lines)
+
+    describe "when there are not enough end keywords", ->
+      it "doesnt throw errors if it cant match all pairs", ->
+        waitsForPromise ->
+          atom.workspace.open('not-enough-end-keywords.rb')
+        runs ->
+          editor = atom.workspace.getActiveTextEditor()
+          lines = editor.displayBuffer.tokenizedBuffer.tokenizedLines
+          map = compile(lines)

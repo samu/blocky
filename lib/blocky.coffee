@@ -1,5 +1,5 @@
 BlockyView = require './blocky-view'
-compileBlockMap = require './consumer'
+compileBlockMap = require './blockmap-compiler'
 {CompositeDisposable, Range} = require 'atom'
 _ = require 'underscore-plus'
 
