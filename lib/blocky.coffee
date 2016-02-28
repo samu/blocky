@@ -37,7 +37,6 @@ module.exports = Blocky =
   doScrollStuff: ->
 
   notifyChangeCursorPosition: (e) ->
-    console.log "scrolling!"
     marker.destroy() for marker in @markers
     cursorPosition = @editor.getCursorBufferPosition()
     entries = @blockMap[cursorPosition.row]

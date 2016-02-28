@@ -42,6 +42,8 @@ class Block
 
 class Stack
   constructor: (@blockMap) ->
+    invisiblesSpace = atom.config.get('editor.invisibles.space')
+    @invisiblesRegex = new RegExp("^#{invisiblesSpace}*if")
     @stack = []
 
   push: (parameters, line) ->
@@ -52,7 +54,7 @@ class Stack
       @getTop()?.pushInbetween(parameters)
 
     else if ifKeyword.test(parameters.keyword)
-      if /^\s*if/.test(line.text)
+      if @invisiblesRegex.test(line.text)
         @stack.push(new Block(parameters))
 
     else if openKeywords.test(parameters.keyword)
@@ -86,7 +88,6 @@ module.exports = (lines) ->
       for scope in token.scopes
         if scope.indexOf("keyword") >= 0
           [position, length] = getPositionAndLength(tags, index)
-          # console.log token.value, position, length
           stack.push(new Parameters(token.value, lineNumber, position, length), line)
 
   # console.log blockMap.map

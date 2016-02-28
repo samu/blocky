@@ -65,13 +65,14 @@ describe "Blocky", ->
   describe "if statements", ->
     describe "basic if", ->
       beforeEach ->
+        atom.config.set("editor.invisibles.space", " ")
         prepare('basic-if.rb')
 
       it "finds them", ->
         expect(_.keys(map).length).toBe 2
-        expect(map[0][0].parameters.keyword).toBe "if"
+        expect(map[0][2].parameters.keyword).toBe "if"
         expect(map[1]).toBe undefined
-        expect(map[2][0].parameters.keyword).toBe "end"
+        expect(map[2][2].parameters.keyword).toBe "end"
 
     describe "one-line if", ->
       beforeEach ->
