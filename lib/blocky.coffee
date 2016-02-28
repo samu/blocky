@@ -34,7 +34,8 @@ module.exports = Blocky =
     @editor.decorateMarker(marker, type: 'highlight', class: 'bracket-matcher', deprecatedRegionClass: 'bracket-matcher')
     @markers.push(marker)
 
-  doScrollStuff: ->
+  liesBetween: (position, begin, end) ->
+    begin <= position <= end
 
   notifyChangeCursorPosition: (e) ->
     marker.destroy() for marker in @markers
@@ -42,7 +43,7 @@ module.exports = Blocky =
     entries = @blockMap[cursorPosition.row]
     if entries
       for entry in entries
-        if entry
+        if entry and @liesBetween(cursorPosition.column, entry.parameters.position, entry.parameters.position + entry.parameters.length)
           @decorateKeyword(entry.parameters.lineNumber, entry.parameters.position, entry.parameters.length)
           for [lineNumber, column] in entry.appendants
             appendant = @blockMap[lineNumber][column]
