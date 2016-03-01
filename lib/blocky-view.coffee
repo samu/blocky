@@ -1,22 +1,48 @@
+compileBlockMap = require './blockmap-compiler'
+{CompositeDisposable, Range} = require 'atom'
+_ = require 'underscore-plus'
+
 module.exports =
 class BlockyView
-  constructor: (serializedState) ->
-    # Create root element
-    @element = document.createElement('div')
-    @element.classList.add('blocky')
+  constructor: (@editor) ->
+    @markers = []
+    @subscriptions = new CompositeDisposable
 
-    # Create message element
-    message = document.createElement('div')
-    message.textContent = "The Blocky package is Alive! It's ALIVE!"
-    message.classList.add('message')
-    @element.appendChild(message)
+    @subscriptions.add(editor.onDidStopChanging(=> @notifyContentsModified()))
+    @subscriptions.add(editor.displayBuffer.onDidTokenize(=> @notifyContentsModified()))
+    # TODO debounce
+    fuu = (e) => @notifyChangeCursorPosition(e)
+    debounced = _.debounce(fuu, 30)
+    # debounced = fuu
+    @subscriptions.add(editor.onDidChangeCursorPosition(debounced))
 
-  # Returns an object that can be retrieved when package is activated
-  serialize: ->
-
-  # Tear down any state and detach
   destroy: ->
-    @element.remove()
+    @subscriptions.dispose()
 
-  getElement: ->
-    @element
+  destroyMarkers: ->
+    marker.destroy() for marker in @markers
+
+  notifyContentsModified: ->
+    lines = @editor.displayBuffer.tokenizedBuffer.tokenizedLines
+    @blockMap = compileBlockMap(lines)
+
+  decorateKeyword: (lineNumber, position, length) ->
+    range = new Range([lineNumber, position], [lineNumber, position + length])
+    marker = @editor.markBufferRange(range)
+    @editor.decorateMarker(marker, type: 'highlight', class: 'bracket-matcher', deprecatedRegionClass: 'bracket-matcher')
+    @markers.push(marker)
+
+  liesBetween: (position, begin, end) ->
+    begin <= position <= end
+
+  notifyChangeCursorPosition: (e) ->
+    @destroyMarkers()
+    cursorPosition = @editor.getCursorBufferPosition()
+    entries = @blockMap[cursorPosition.row]
+    if entries
+      for entry in entries
+        if entry and @liesBetween(cursorPosition.column, entry.parameters.position, entry.parameters.position + entry.parameters.length)
+          @decorateKeyword(entry.parameters.lineNumber, entry.parameters.position, entry.parameters.length)
+          for [lineNumber, column] in entry.appendants
+            appendant = @blockMap[lineNumber][column]
+            @decorateKeyword(appendant.parameters.lineNumber, appendant.parameters.position, appendant.parameters.length)

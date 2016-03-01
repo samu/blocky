@@ -1,50 +1,7 @@
-BlockyView = require './blocky-view'
-compileBlockMap = require './blockmap-compiler'
-{CompositeDisposable, Range} = require 'atom'
-_ = require 'underscore-plus'
+BlockyView = null
 
 module.exports = Blocky =
-  blockyView: null
-  modalPanel: null
-  subscriptions: null
-  editor: null
-  markers: []
-
   activate: ->
-    console.log "BLOCKY HAS BEEN ACTIVATED YEAH"
     atom.workspace.observeTextEditors (editor) =>
-      @editor = editor
-      @subscriptions = new CompositeDisposable
-
-      @subscriptions.add(editor.onDidStopChanging(=> @notifyContentsModified()))
-      @subscriptions.add(editor.displayBuffer.onDidTokenize(=> @notifyContentsModified()))
-      # TODO debounce
-      fuu = (e) => @notifyChangeCursorPosition(e)
-      debounced = _.debounce(fuu, 30)
-      # debounced = fuu
-      @subscriptions.add(editor.onDidChangeCursorPosition(debounced))
-
-  notifyContentsModified: ->
-    lines = @editor.displayBuffer.tokenizedBuffer.tokenizedLines
-    @blockMap = compileBlockMap(lines)
-
-  decorateKeyword: (lineNumber, position, length) ->
-    range = new Range([lineNumber, position], [lineNumber, position + length])
-    marker = @editor.markBufferRange(range)
-    @editor.decorateMarker(marker, type: 'highlight', class: 'bracket-matcher', deprecatedRegionClass: 'bracket-matcher')
-    @markers.push(marker)
-
-  liesBetween: (position, begin, end) ->
-    begin <= position <= end
-
-  notifyChangeCursorPosition: (e) ->
-    marker.destroy() for marker in @markers
-    cursorPosition = @editor.getCursorBufferPosition()
-    entries = @blockMap[cursorPosition.row]
-    if entries
-      for entry in entries
-        if entry and @liesBetween(cursorPosition.column, entry.parameters.position, entry.parameters.position + entry.parameters.length)
-          @decorateKeyword(entry.parameters.lineNumber, entry.parameters.position, entry.parameters.length)
-          for [lineNumber, column] in entry.appendants
-            appendant = @blockMap[lineNumber][column]
-            @decorateKeyword(appendant.parameters.lineNumber, appendant.parameters.position, appendant.parameters.length)
+      BlockyView ?= require './blocky-view'
+      new BlockyView(editor)
