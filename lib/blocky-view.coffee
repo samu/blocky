@@ -18,6 +18,7 @@ class BlockyView
 
   destroy: ->
     @subscriptions.dispose()
+    @destroyMarkers()
 
   destroyMarkers: ->
     marker.destroy() for marker in @markers
