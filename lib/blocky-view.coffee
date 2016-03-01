@@ -9,7 +9,10 @@ class BlockyView
     @subscriptions = new CompositeDisposable
 
     @subscriptions.add(editor.onDidStopChanging(=> @notifyContentsModified()))
-    @subscriptions.add(editor.displayBuffer.onDidTokenize(=> @notifyContentsModified()))
+    @subscriptions.add(editor.displayBuffer.onDidTokenize(=>
+      @notifyContentsModified()
+      @notifyChangeCursorPosition()
+    ))
     # TODO debounce
     fuu = (e) => @notifyChangeCursorPosition(e)
     debounced = _.debounce(fuu, 30)
