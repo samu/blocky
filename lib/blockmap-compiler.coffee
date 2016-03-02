@@ -84,14 +84,10 @@ module.exports = (lines) ->
   stack = new Stack(blockMap)
   for line, lineNumber in lines
     tags = line.tags.filter (n) -> n >= 0
-    # console.log line.text
-    # console.log tags
-    # console.log line.tokens
     for token, index in line.tokens
       for scope in token.scopes
         if scope.indexOf("keyword") >= 0
           [position, length] = getPositionAndLength(tags, index)
           stack.push(new Parameters(token.value, lineNumber, position, length), line)
 
-  # console.log blockMap.map
   return blockMap.map
