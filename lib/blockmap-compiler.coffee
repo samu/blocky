@@ -1,6 +1,3 @@
-# openKeywords = /begin|module|class|def|if/
-# inbetweenKeywords = /private|rescue|else/
-# endKeywords = /end/
 openKeywords = /begin|case|class|def|do|for|module|unless|while/
 ifKeyword = /if/
 inbetweenKeywords = /break|else|elsif|ensure|next|rescue|return/
