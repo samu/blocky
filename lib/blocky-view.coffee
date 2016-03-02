@@ -16,7 +16,7 @@ class BlockyView
     # TODO debounce
     fuu = (e) => @notifyChangeCursorPosition(e)
     debounced = _.debounce(fuu, 30)
-    # debounced = fuu
+    debounced = fuu
     @subscriptions.add(editor.onDidChangeCursorPosition(debounced))
 
   destroy: ->
