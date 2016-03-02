@@ -33,12 +33,13 @@ class Block
   pushEnd: (parameters) ->
     @end = parameters
 
+  makeAppendant: (parameters, skip) ->
+    [parameters.lineNumber, parameters.position] unless skip is parameters.lineNumber
+
   getAppendants: (skip) ->
     appendants = []
-    appendants.push([@begin.lineNumber, @begin.position]) unless skip is @begin.lineNumber
-    appendants.push([@end.lineNumber, @end.position])  unless skip is @end.lineNumber
-    for intermediate in @intermediates
-      appendants.push([intermediate.lineNumber, intermediate.position]) unless skip is intermediate.lineNumber
+    for candiate in [@begin, @end].concat(@intermediates)
+      appendants.push(a) if a = @makeAppendant(candiate, skip)
     return appendants
 
 class Stack
