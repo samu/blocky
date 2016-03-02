@@ -51,8 +51,8 @@ class Stack
 
   push: (parameters, line) ->
     # TODO
-    # this tests the intermediates first, because of the if that also appears in elsif
-    # maybe this should be done with a more specific regex
+    # this handles the intermediates first, because of the if that also appears
+    # in elsif. maybe this should be taken care of with a more specific regex.
     if intermediateKeywords.test(parameters.keyword)
       @getTop()?.pushInbetween(parameters)
 
