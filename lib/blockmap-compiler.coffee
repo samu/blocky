@@ -1,6 +1,6 @@
 openKeywords = /begin|case|class|def|do|for|module|unless|while/
 ifKeyword = /if/
-inbetweenKeywords = /break|else|elsif|ensure|next|rescue|return/
+intermediateKeywords = /break|else|elsif|ensure|next|rescue|return/
 endKeyword = /end/
 
 class Parameters
@@ -12,8 +12,8 @@ class BlockMap
 
   push: (block) ->
     @entryAt(block.begin.lineNumber)[block.begin.position] = {parameters: block.begin, appendants: block.getAppendants(block.begin.lineNumber)}
-    for inbetween in block.inbetweens
-      @entryAt(inbetween.lineNumber)[inbetween.position] = {parameters: inbetween, appendants: block.getAppendants(inbetween.lineNumber)}
+    for intermediate in block.intermediates
+      @entryAt(intermediate.lineNumber)[intermediate.position] = {parameters: intermediate, appendants: block.getAppendants(intermediate.lineNumber)}
     @entryAt(block.end.lineNumber)[block.end.position] = {parameters: block.end, appendants: block.getAppendants(block.end.lineNumber)}
 
   entryAt: (lineNumber) ->
@@ -21,10 +21,10 @@ class BlockMap
 
 class Block
   constructor: (@begin) ->
-    @inbetweens = []
+    @intermediates = []
 
   pushInbetween: (parameters) ->
-    @inbetweens.push(parameters)
+    @intermediates.push(parameters)
 
   pushEnd: (parameters) ->
     @end = parameters
@@ -33,8 +33,8 @@ class Block
     appendants = []
     appendants.push([@begin.lineNumber, @begin.position]) unless skip is @begin.lineNumber
     appendants.push([@end.lineNumber, @end.position])  unless skip is @end.lineNumber
-    for inbetween in @inbetweens
-      appendants.push([inbetween.lineNumber, inbetween.position]) unless skip is inbetween.lineNumber
+    for intermediate in @intermediates
+      appendants.push([intermediate.lineNumber, intermediate.position]) unless skip is intermediate.lineNumber
     return appendants
 
 class Stack
@@ -45,9 +45,9 @@ class Stack
 
   push: (parameters, line) ->
     # TODO
-    # this tests the inbetweens first, because of the if that also appears in elsif
+    # this tests the intermediates first, because of the if that also appears in elsif
     # maybe this should be done with a more specific regex
-    if inbetweenKeywords.test(parameters.keyword)
+    if intermediateKeywords.test(parameters.keyword)
       @getTop()?.pushInbetween(parameters)
 
     else if ifKeyword.test(parameters.keyword)
