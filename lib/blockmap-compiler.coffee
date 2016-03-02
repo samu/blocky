@@ -10,14 +10,18 @@ class BlockMap
   constructor: ->
     @map = []
 
-  push: (block) ->
-    @entryAt(block.begin.lineNumber)[block.begin.position] = {parameters: block.begin, appendants: block.getAppendants(block.begin.lineNumber)}
-    for intermediate in block.intermediates
-      @entryAt(intermediate.lineNumber)[intermediate.position] = {parameters: intermediate, appendants: block.getAppendants(intermediate.lineNumber)}
-    @entryAt(block.end.lineNumber)[block.end.position] = {parameters: block.end, appendants: block.getAppendants(block.end.lineNumber)}
-
   entryAt: (lineNumber) ->
     @map[lineNumber] ||= []
+
+  putEntry: (parameters, block) ->
+    @entryAt(parameters.lineNumber)[parameters.position] =
+      {parameters, appendants: block.getAppendants(parameters.lineNumber)}
+
+  push: (block) ->
+    @putEntry(block.begin, block)
+    for intermediate in block.intermediates
+      @putEntry(intermediate, block)
+    @putEntry(block.end, block)
 
 class Block
   constructor: (@begin) ->
