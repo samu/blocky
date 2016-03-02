@@ -1,7 +1,7 @@
 openKeywords = /begin|case|class|def|do|for|module|unless|while/
 ifKeyword = /if/
 inbetweenKeywords = /break|else|elsif|ensure|next|rescue|return/
-endKeywords = /end/
+endKeyword = /end/
 
 class Parameters
   constructor: (@keyword, @lineNumber, @position, @length) ->
@@ -57,7 +57,7 @@ class Stack
     else if openKeywords.test(parameters.keyword)
       @stack.push(new Block(parameters))
 
-    else if endKeywords.test(parameters.keyword)
+    else if endKeyword.test(parameters.keyword)
       @getTop()?.pushEnd(parameters)
       block = @stack.pop()
       @blockMap.push(block) if block
