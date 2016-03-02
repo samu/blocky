@@ -1,4 +1,4 @@
-# blocky package
+# blocky package [![Build Status](https://travis-ci.org/samu/blocky.svg?branch=master)](https://travis-ci.org/samu/blocky)
 
 A short description of your package.
 
