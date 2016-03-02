@@ -4,25 +4,18 @@
   "version": "0.0.0",
   "description": "A short description of your package",
   "keywords": [
+    "ruby", "block", "highlight"
   ],
-  "repository": "https://github.com/atom/blocky",
+  "repository": "https://github.com/samu/blocky",
   "license": "MIT",
   "engines": {
     "atom": ">=1.0.0 <2.0.0"
   },
   "dependencies": {
-    "highlights": "1.3.0",
-    "jquery": "^2.1.4",
-    "first-mate": "^5.1.1",
-    "first-mate-select-grammar": "^1.0.1",
-    "fs-plus": "^2.2.6",
-    "once": "^1.3.2",
-    "optimist": "^0.6.1",
-    "season": "^5.1.2",
-    "underscore-plus": "^1.5.1"
   },
   "devDependencies": {
     "fs-plus": "^2.0.0",
-    "temp": "~0.8.1"
+    "temp": "~0.8.1",
+    "underscore-plus": "^1.5.1"
   }
 }
