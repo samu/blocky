@@ -1,2 +1,2 @@
-# 'atom-text-editor':
-#   '': 'blocky:select-inside-brackets'
+'.platform-darwin atom-text-editor':
+  'ctrl-cmd-m': 'blocky:select-inside-block'

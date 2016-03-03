@@ -2,8 +2,8 @@
 'context-menu':
   'atom-text-editor': [
     {
-      'label': 'Toggle blocky'
-      'command': 'blocky:toggle'
+      'label': 'Select inside block'
+      'command': 'blocky:select-inside-block'
     }
   ]
 'menu': [
@@ -13,8 +13,8 @@
       'label': 'blocky'
       'submenu': [
         {
-          'label': 'Toggle'
-          'command': 'blocky:toggle'
+          'label': 'Select inside block'
+          'command': 'blocky:select-inside-block'
         }
       ]
     ]

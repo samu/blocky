@@ -4,7 +4,7 @@ _ = require 'underscore-plus'
 
 module.exports =
 class BlockyView
-  constructor: (@editor) ->
+  constructor: (@editor, editorElement) ->
     @markers = []
     @subscriptions = new CompositeDisposable
 
