@@ -8,7 +8,11 @@ class BlockyView
     @markers = []
     @subscriptions = new CompositeDisposable
 
+    @subscriptions.add atom.commands.add editorElement, 'blocky:select-inside-block', =>
+      @selectInsideBlock()
+
     @subscriptions.add(editor.onDidStopChanging(=> @notifyContentsModified()))
+
     @subscriptions.add(editor.displayBuffer.onDidTokenize(=>
       @notifyContentsModified()
       @notifyChangeCursorPosition()
@@ -25,6 +29,9 @@ class BlockyView
 
   destroyMarkers: ->
     marker.destroy() for marker in @markers
+
+  selectInsideBlock: ->
+    console.log "inside block!"
 
   notifyContentsModified: ->
     lines = @editor.displayBuffer.tokenizedBuffer.tokenizedLines
