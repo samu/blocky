@@ -1,6 +1,5 @@
 compileBlockMap = require './blockmap-compiler'
 {CompositeDisposable, Range} = require 'atom'
-_ = require 'underscore-plus'
 
 module.exports =
 class BlockyView
@@ -9,15 +8,13 @@ class BlockyView
     @subscriptions = new CompositeDisposable
 
     @subscriptions.add(editor.onDidStopChanging(=> @notifyContentsModified()))
+
     @subscriptions.add(editor.displayBuffer.onDidTokenize(=>
       @notifyContentsModified()
       @notifyChangeCursorPosition()
     ))
-    # TODO debounce
-    fuu = (e) => @notifyChangeCursorPosition(e)
-    debounced = _.debounce(fuu, 30)
-    debounced = fuu
-    @subscriptions.add(editor.onDidChangeCursorPosition(debounced))
+
+    @subscriptions.add(editor.onDidChangeCursorPosition(=> @notifyChangeCursorPosition()))
 
   destroy: ->
     @subscriptions.dispose()
@@ -39,7 +36,7 @@ class BlockyView
   liesBetween: (position, begin, end) ->
     begin <= position <= end
 
-  notifyChangeCursorPosition: (e) ->
+  notifyChangeCursorPosition: ->
     @destroyMarkers()
     cursorPosition = @editor.getCursorBufferPosition()
     entries = @blockMap[cursorPosition.row]
