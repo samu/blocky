@@ -3,7 +3,7 @@ compileBlockMap = require './blockmap-compiler'
 
 module.exports =
 class BlockyView
-  constructor: (@editor) ->
+  constructor: (@editor, editorElement) ->
     @markers = []
     @subscriptions = new CompositeDisposable
 
@@ -16,6 +16,8 @@ class BlockyView
 
     @subscriptions.add(editor.onDidChangeCursorPosition(=> @notifyChangeCursorPosition()))
 
+    @subscriptions.add(atom.commands.add(editorElement, 'blocky:expand-selection', => @expandSelection()))
+
   destroy: ->
     @subscriptions.dispose()
     @destroyMarkers()
@@ -26,6 +28,24 @@ class BlockyView
   notifyContentsModified: ->
     lines = @editor.displayBuffer.tokenizedBuffer.tokenizedLines
     @blockMap = compileBlockMap(lines)
+
+  findCurrentBlock: (cursorPosition) ->
+    row = cursorPosition.row
+    row-- while row >= 0 and not entries = @blockMap[row]
+    return unless entries
+
+    for entry in entries
+      if entry and @liesBetween(cursorPosition.column, entry.parameters.position, entry.parameters.position + entry.parameters.length)
+        startRow = entry.block.begin.lineNumber
+        startCol = entry.block.begin.position
+        endRow = entry.block.end.lineNumber
+        endCol = entry.block.end.position + entry.block.end.length
+
+        rangeToSelect = new Range([startRow, startCol], [endRow, endCol])
+        @editor.setSelectedBufferRange(rangeToSelect)
+
+  expandSelection: ->
+    currentBlock = @findCurrentBlock(@editor.getCursorBufferPosition())
 
   decorateKeyword: (lineNumber, position, length) ->
     range = new Range([lineNumber, position], [lineNumber, position + length])

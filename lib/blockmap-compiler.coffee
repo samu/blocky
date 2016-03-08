@@ -15,7 +15,7 @@ class BlockMap
 
   putEntry: (parameters, block) ->
     @entryAt(parameters.lineNumber)[parameters.position] =
-      {parameters, appendants: block.getAppendants(parameters.lineNumber)}
+      {block, parameters, appendants: block.getAppendants(parameters.lineNumber)}
 
   push: (block) ->
     @putEntry(block.begin, block)
