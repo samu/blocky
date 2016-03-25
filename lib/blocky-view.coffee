@@ -4,6 +4,7 @@ compileBlockMap = require './blockmap-compiler'
 module.exports =
 class BlockyView
   constructor: (@editor, editorElement) ->
+    @blockMap = []
     @markers = []
     @subscriptions = new CompositeDisposable
 
