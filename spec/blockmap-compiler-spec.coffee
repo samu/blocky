@@ -71,7 +71,7 @@ describe "compile", ->
     describe "basic if", ->
       beforeEach ->
         atom.config.set("editor.invisibles.space", " ")
-        prepare('basic-if.rb')
+        prepare("basic-if.rb")
 
       it "finds them", ->
         expect(_.keys(map).length).toBe 2
@@ -81,7 +81,29 @@ describe "compile", ->
 
     describe "one-line if", ->
       beforeEach ->
-        prepare('one-line-if.rb')
+        prepare("one-line-if.rb")
+
+      it "ignores them", ->
+        expect(_.keys(map).length).toBe 2
+        expect(map[0][0].parameters.keyword).toBe "begin"
+        expect(map[1]).toBe undefined
+        expect(map[2][0].parameters.keyword).toBe "end"
+
+  describe "unless statements", ->
+    describe "basic unless", ->
+      beforeEach ->
+        atom.config.set("editor.invisibles.space", " ")
+        prepare("basic-unless.rb")
+
+      it "finds them", ->
+        expect(_.keys(map).length).toBe 2
+        expect(map[0][2].parameters.keyword).toBe "unless"
+        expect(map[1]).toBe undefined
+        expect(map[2][2].parameters.keyword).toBe "end"
+
+    describe "one-line unless", ->
+      beforeEach ->
+        prepare("one-line-unless.rb")
 
       it "ignores them", ->
         expect(_.keys(map).length).toBe 2

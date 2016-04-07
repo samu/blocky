@@ -1,5 +1,5 @@
-openKeywords = /begin|case|class|def|do|for|module|unless|while/
-ifKeyword = /if/
+openKeywords = /begin|case|class|def|do|for|module|while/
+ifOrUnlessKeyword = /if|unless/
 intermediateKeywords = /break|else|elsif|ensure|next|rescue|return/
 endKeyword = /end/
 
@@ -46,7 +46,7 @@ class Block
 class Stack
   constructor: (@blockMap) ->
     invisiblesSpace = atom.config.get('editor.invisibles.space')
-    @invisiblesRegex = new RegExp("^#{invisiblesSpace}*if")
+    @invisiblesRegex = new RegExp("^#{invisiblesSpace}*(if|unless)")
     @stack = []
 
   push: (parameters, line) ->
@@ -56,7 +56,7 @@ class Stack
     if intermediateKeywords.test(parameters.keyword)
       @getTop()?.pushInbetween(parameters)
 
-    else if ifKeyword.test(parameters.keyword)
+    else if ifOrUnlessKeyword.test(parameters.keyword)
       if @invisiblesRegex.test(line.text)
         @stack.push(new Block(parameters))
 
