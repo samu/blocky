@@ -1,6 +1,6 @@
 openKeywords = /begin|case|class|def|do|for|module|while/
 ifOrUnlessKeyword = /if|unless/
-intermediateKeywords = /break|else|elsif|ensure|next|rescue|return/
+intermediateKeywords = /else|elsif|ensure|rescue/
 endKeyword = /end/
 
 class Parameters
