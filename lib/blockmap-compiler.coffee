@@ -46,7 +46,9 @@ class Block
 class Stack
   constructor: (@blockMap) ->
     invisiblesSpace = atom.config.get('editor.invisibles.space')
-    @invisiblesRegex = new RegExp("^#{invisiblesSpace}*(if|unless)")
+    keywordPrecededBySpaces = "^#{invisiblesSpace}*(if|unless)"
+    keywordAsAnAssignment = "^.+=.*(if|unless)"
+    @isKeywordWithAppendants = new RegExp("(#{keywordPrecededBySpaces})|(#{keywordAsAnAssignment})")
     @stack = []
 
   push: (parameters, line) ->
@@ -57,7 +59,7 @@ class Stack
       @getTop()?.pushInbetween(parameters)
 
     else if ifOrUnlessKeyword.test(parameters.keyword)
-      if @invisiblesRegex.test(line.text)
+      if @isKeywordWithAppendants.test(line.text)
         @stack.push(new Block(parameters))
 
     else if openKeywords.test(parameters.keyword)

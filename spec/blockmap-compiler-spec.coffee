@@ -89,6 +89,16 @@ describe "compile", ->
         expect(map[1]).toBe undefined
         expect(map[2][0].parameters.keyword).toBe "end"
 
+    describe "assignment with if", ->
+      beforeEach ->
+        prepare("assignment-with-if.rb")
+
+      it "doesnt ignore them", ->
+        expect(_.keys(map).length).toBe 5
+        expect(map[1][10].parameters.keyword).toBe "if"
+        expect(map[3][2].parameters.keyword).toBe "else"
+        expect(map[5][2].parameters.keyword).toBe "end"
+
   describe "unless statements", ->
     describe "basic unless", ->
       beforeEach ->
@@ -110,3 +120,13 @@ describe "compile", ->
         expect(map[0][0].parameters.keyword).toBe "begin"
         expect(map[1]).toBe undefined
         expect(map[2][0].parameters.keyword).toBe "end"
+
+    describe "assignment with unless", ->
+      beforeEach ->
+        prepare("assignment-with-unless.rb")
+
+      it "doesnt ignore them", ->
+        expect(_.keys(map).length).toBe 5
+        expect(map[1][10].parameters.keyword).toBe "unless"
+        expect(map[3][2].parameters.keyword).toBe "else"
+        expect(map[5][2].parameters.keyword).toBe "end"
