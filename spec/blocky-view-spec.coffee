@@ -79,7 +79,6 @@ describe "BlockyView", ->
 
   describe "expandSelection", ->
     beforeEach ->
-      atom.config.set("editor.invisibles.space", " ")
       prepare('big.rb')
 
     it "expands the selection", ->

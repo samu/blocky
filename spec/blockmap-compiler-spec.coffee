@@ -20,7 +20,7 @@ describe "compile", ->
       editor = atom.workspace.getActiveTextEditor()
       fullyTokenize(editor.displayBuffer.tokenizedBuffer)
       lines = editor.displayBuffer.tokenizedBuffer.tokenizedLines
-      map = compile(lines)
+      map = compile(editor.buffer, lines)
 
   beforeEach ->
     [editor, editorView, map] = []
@@ -70,7 +70,6 @@ describe "compile", ->
   describe "if statements", ->
     describe "basic if", ->
       beforeEach ->
-        atom.config.set("editor.invisibles.space", " ")
         prepare("basic-if.rb")
 
       it "finds them", ->
@@ -102,7 +101,6 @@ describe "compile", ->
   describe "unless statements", ->
     describe "basic unless", ->
       beforeEach ->
-        atom.config.set("editor.invisibles.space", " ")
         prepare("basic-unless.rb")
 
       it "finds them", ->

@@ -27,8 +27,8 @@ class BlockyView
     marker.destroy() for marker in @markers
 
   notifyContentsModified: ->
-    lines = @editor.displayBuffer.tokenizedBuffer.tokenizedLines
-    @blockMap = compileBlockMap(lines)
+    tokenizedLines = @editor.displayBuffer.tokenizedBuffer.tokenizedLines
+    @blockMap = compileBlockMap(@editor.getBuffer(), tokenizedLines)
 
   findCurrentBlock: (cursorPosition) ->
     row = cursorPosition.row

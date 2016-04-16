@@ -45,10 +45,9 @@ class Block
 
 class Stack
   constructor: (@blockMap) ->
-    invisiblesSpace = atom.config.get('editor.invisibles.space')
-    keywordPrecededBySpaces = "^#{invisiblesSpace}*(if|unless)"
+    keywordPrecededByWhitespace = "^\\s*(if|unless)"
     keywordAsAnAssignment = "^.+=.*(if|unless)"
-    @isKeywordWithAppendants = new RegExp("(#{keywordPrecededBySpaces})|(#{keywordAsAnAssignment})")
+    @isKeywordWithAppendants = new RegExp("(#{keywordPrecededByWhitespace})|(#{keywordAsAnAssignment})")
     @stack = []
 
   push: (parameters, line) ->
@@ -59,7 +58,7 @@ class Stack
       @getTop()?.pushInbetween(parameters)
 
     else if ifOrUnlessKeyword.test(parameters.keyword)
-      if @isKeywordWithAppendants.test(line.text)
+      if @isKeywordWithAppendants.test(line)
         @stack.push(new Block(parameters))
 
     else if openKeywords.test(parameters.keyword)
@@ -81,15 +80,15 @@ getPositionAndLength = (tags, index) ->
     counter++
   return [position, tags[counter]]
 
-module.exports = (lines) ->
+module.exports = (buffer, tokenizedLines) ->
   blockMap = new BlockMap()
   stack = new Stack(blockMap)
-  for line, lineNumber in lines
+  for line, lineNumber in tokenizedLines
     tags = line.tags.filter (n) -> n >= 0
     for token, index in line.tokens
       for scope in token.scopes
         if scope.indexOf("keyword") >= 0
           [position, length] = getPositionAndLength(tags, index)
-          stack.push(new Parameters(token.value, lineNumber, position, length), line)
+          stack.push(new Parameters(token.value, lineNumber, position, length), buffer.lineForRow(lineNumber))
 
   return blockMap.map
