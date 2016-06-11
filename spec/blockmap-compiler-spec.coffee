@@ -88,6 +88,16 @@ describe "compile", ->
         expect(map[1]).toBe undefined
         expect(map[2][0].parameters.keyword).toBe "end"
 
+      describe "with assignment", ->
+        beforeEach ->
+          prepare("one-line-if-with-assignment.rb")
+
+        it "ignores them", ->
+          expect(_.keys(map).length).toBe 2
+          expect(map[0][0].parameters.keyword).toBe "def"
+          expect(map[1]).toBe undefined
+          expect(map[2][0].parameters.keyword).toBe "end"
+
     describe "assignment with if", ->
       beforeEach ->
         prepare("assignment-with-if.rb")
@@ -118,6 +128,16 @@ describe "compile", ->
         expect(map[0][0].parameters.keyword).toBe "begin"
         expect(map[1]).toBe undefined
         expect(map[2][0].parameters.keyword).toBe "end"
+
+      describe "with assignment", ->
+        beforeEach ->
+          prepare("one-line-unless-with-assignment.rb")
+
+        it "ignores them", ->
+          expect(_.keys(map).length).toBe 2
+          expect(map[0][0].parameters.keyword).toBe "def"
+          expect(map[1]).toBe undefined
+          expect(map[2][0].parameters.keyword).toBe "end"
 
     describe "assignment with unless", ->
       beforeEach ->
