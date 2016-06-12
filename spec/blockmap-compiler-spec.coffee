@@ -128,3 +128,15 @@ describe "compile", ->
         expect(map[1][10].parameters.keyword).toBe "unless"
         expect(map[3][2].parameters.keyword).toBe "else"
         expect(map[5][2].parameters.keyword).toBe "end"
+
+  describe "rescue statements", ->
+    describe "one-line rescue", ->
+      beforeEach ->
+        prepare("one-line-rescue.rb")
+
+      it "ignores them", ->
+        expect(_.keys(map).length).toBe 2
+        expect(map[0][0].parameters.keyword).toBe "def"
+        expect(map[1]).toBe undefined
+        expect(map[2]).toBe undefined
+        expect(map[3][0].parameters.keyword).toBe "end"

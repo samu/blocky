@@ -1,6 +1,7 @@
 openKeywords = /begin|case|class|def|do|for|module|while/
 ifOrUnlessKeyword = /if|unless/
-intermediateKeywords = /else|elsif|ensure|rescue/
+intermediateKeywords = /else|elsif|ensure/
+notInlineRescue = /^\s*rescue/
 endKeyword = /end/
 
 class Parameters
@@ -54,7 +55,7 @@ class Stack
     # TODO
     # this handles the intermediates first, because of the if that also appears
     # in elsif. maybe this should be taken care of with a more specific regex.
-    if intermediateKeywords.test(parameters.keyword)
+    if intermediateKeywords.test(parameters.keyword) || notInlineRescue.test(line)
       @getTop()?.pushInbetween(parameters)
 
     else if ifOrUnlessKeyword.test(parameters.keyword)
