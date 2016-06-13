@@ -46,7 +46,7 @@ class Block
 class Stack
   constructor: (@blockMap) ->
     keywordPrecededByWhitespace = "^\\s*(if|unless)"
-    keywordAsAnAssignment = "^.+=.*(if|unless)"
+    keywordAsAnAssignment = "^.+=\\s+(if|unless)"
     @isKeywordWithAppendants = new RegExp("(#{keywordPrecededByWhitespace})|(#{keywordAsAnAssignment})")
     @stack = []
 
