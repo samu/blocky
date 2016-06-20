@@ -67,6 +67,28 @@ describe "compile", ->
       it "doesnt throw errors if it cant match all pairs", ->
         expect(map).toBeDefined()
 
+    describe "when there are keywords, that includes other keywords", ->
+
+      describe "extend keywords", ->
+        beforeEach ->
+          prepare('extend.rb')
+
+        it "ignores them", ->
+          expect(_.keys(map).length).toBe 2
+          expect(map[0][0].parameters.keyword).toBe "class"
+          expect(map[1]).toBe undefined
+          expect(map[2][0].parameters.keyword).toBe "end"
+
+      describe "defined? keywords", ->
+        beforeEach ->
+          prepare('defined.rb')
+
+        it "ignores them", ->
+          expect(_.keys(map).length).toBe 2
+          expect(map[0][0].parameters.keyword).toBe "def"
+          expect(map[1]).toBe undefined
+          expect(map[2][0].parameters.keyword).toBe "end"
+
   describe "if statements", ->
     describe "basic if", ->
       beforeEach ->

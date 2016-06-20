@@ -1,8 +1,8 @@
-openKeywords = /begin|case|class|def|do|for|module|while/
+openKeywords = /^(begin|case|class|def|do|for|module|while)$/
 ifOrUnlessKeyword = /if|unless/
 intermediateKeywords = /else|elsif|ensure/
 notInlineRescue = /^\s*rescue/
-endKeyword = /end/
+endKeyword = /^end$/
 
 class Parameters
   constructor: (@keyword, @lineNumber, @position, @length) ->
