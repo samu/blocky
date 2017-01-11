@@ -8,14 +8,14 @@ class BlockyView
     @markers = []
     @subscriptions = new CompositeDisposable
 
-    @subscriptions.add(editor.onDidStopChanging(=> @notifyContentsModified()))
+    @subscriptions.add(@editor.onDidStopChanging(=> @notifyContentsModified()))
 
-    @subscriptions.add(editor.displayBuffer.onDidTokenize(=>
+    @subscriptions.add(@editor.displayBuffer.onDidTokenize(=>
       @notifyContentsModified()
       @notifyChangeCursorPosition()
     ))
 
-    @subscriptions.add(editor.onDidChangeCursorPosition(=> @notifyChangeCursorPosition()))
+    @subscriptions.add(@editor.onDidChangeCursorPosition(=> @notifyChangeCursorPosition()))
 
     @subscriptions.add(atom.commands.add(editorElement, 'blocky:expand-selection', => @expandSelection()))
 
