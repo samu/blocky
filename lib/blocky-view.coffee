@@ -10,7 +10,7 @@ class BlockyView
 
     @subscriptions.add(@editor.onDidStopChanging(=> @notifyContentsModified()))
 
-    @subscriptions.add(@editor.displayBuffer.onDidTokenize(=>
+    @subscriptions.add(@editor.onDidTokenize(=>
       @notifyContentsModified()
       @notifyChangeCursorPosition()
     ))
@@ -27,7 +27,7 @@ class BlockyView
     marker.destroy() for marker in @markers
 
   notifyContentsModified: ->
-    tokenizedLines = @editor.displayBuffer.tokenizedBuffer.tokenizedLines
+    tokenizedLines = @editor.tokenizedBuffer.tokenizedLines
     @blockMap = compileBlockMap(@editor.getBuffer(), tokenizedLines)
 
   findCurrentBlock: (cursorPosition) ->
