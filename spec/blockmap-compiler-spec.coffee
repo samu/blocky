@@ -18,8 +18,8 @@ describe "compile", ->
       atom.workspace.open(fileName)
     runs ->
       editor = atom.workspace.getActiveTextEditor()
-      fullyTokenize(editor.displayBuffer.tokenizedBuffer)
-      lines = editor.displayBuffer.tokenizedBuffer.tokenizedLines
+      fullyTokenize(editor.tokenizedBuffer)
+      lines = editor.tokenizedBuffer.tokenizedLines
       map = compile(editor.buffer, lines)
 
   beforeEach ->
@@ -184,13 +184,12 @@ describe "compile", ->
         expect(map[3][0].parameters.keyword).toBe "end"
 
   describe "do-blocks", ->
-
     describe "with parameters", ->
       beforeEach ->
         prepare("do-block-with-parameters.rb")
 
       it "finds them", ->
         expect(_.keys(map).length).toBe 2
-        expect(map[0][10].parameters.keyword).toBe "do " # see https://github.com/atom/language-ruby/issues/148
+        expect(map[0][10].parameters.keyword).toBe "do"
         expect(map[1]).toBe undefined
         expect(map[2][0].parameters.keyword).toBe "end"
