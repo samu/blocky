@@ -1,7 +1,7 @@
 {
   "name": "blocky",
   "main": "./lib/blocky",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "description": "Highlights block constructs in ruby code.",
   "keywords": [
     "ruby",
