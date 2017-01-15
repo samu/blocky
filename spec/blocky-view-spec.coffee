@@ -10,6 +10,9 @@ describe "BlockyView", ->
   fullyTokenize = (tokenizedBuffer) ->
     tokenizedBuffer.setVisible(true)
     advanceClock() while tokenizedBuffer.firstInvalidRow()?
+    # Hack: for some reason, did-tokenize is not emittet in the specs.
+    # Maybe this line can be removed in the future.
+    tokenizedBuffer.emitter.emit "did-tokenize"
 
   prepare = (fileName) ->
     waitsForPromise ->
