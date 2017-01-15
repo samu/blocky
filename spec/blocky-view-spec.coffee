@@ -20,15 +20,14 @@ describe "BlockyView", ->
     runs ->
       editor = atom.workspace.getActiveTextEditor()
       editorElement = atom.views.getView(editor)
-      buffer = editor.getBuffer()
       fullyTokenize(editor.tokenizedBuffer)
 
   beforeEach ->
     [editor, editorElement] = []
     waitsForPromise ->
-      atom.packages.activatePackage("blocky")
-    waitsForPromise ->
       atom.packages.activatePackage("language-ruby")
+    waitsForPromise ->
+      atom.packages.activatePackage("blocky")
 
   describe "basic case", ->
     expectNoHighlights = ->
