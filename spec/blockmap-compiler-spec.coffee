@@ -18,9 +18,9 @@ describe "compile", ->
       atom.workspace.open(fileName)
     runs ->
       editor = atom.workspace.getActiveTextEditor()
-      fullyTokenize(editor.displayBuffer.tokenizedBuffer)
-      lines = editor.displayBuffer.tokenizedBuffer.tokenizedLines
-      map = compile(lines)
+      fullyTokenize(editor.tokenizedBuffer)
+      lines = editor.tokenizedBuffer.tokenizedLines
+      map = compile(editor.buffer, lines)
 
   beforeEach ->
     [editor, editorView, map] = []
@@ -67,11 +67,32 @@ describe "compile", ->
       it "doesnt throw errors if it cant match all pairs", ->
         expect(map).toBeDefined()
 
+    describe "when there are keywords, that includes other keywords", ->
+
+      describe "extend keywords", ->
+        beforeEach ->
+          prepare('extend.rb')
+
+        it "ignores them", ->
+          expect(_.keys(map).length).toBe 2
+          expect(map[0][0].parameters.keyword).toBe "class"
+          expect(map[1]).toBe undefined
+          expect(map[2][0].parameters.keyword).toBe "end"
+
+      describe "defined? keywords", ->
+        beforeEach ->
+          prepare('defined.rb')
+
+        it "ignores them", ->
+          expect(_.keys(map).length).toBe 2
+          expect(map[0][0].parameters.keyword).toBe "def"
+          expect(map[1]).toBe undefined
+          expect(map[2][0].parameters.keyword).toBe "end"
+
   describe "if statements", ->
     describe "basic if", ->
       beforeEach ->
-        atom.config.set("editor.invisibles.space", " ")
-        prepare('basic-if.rb')
+        prepare("basic-if.rb")
 
       it "finds them", ->
         expect(_.keys(map).length).toBe 2
@@ -81,10 +102,94 @@ describe "compile", ->
 
     describe "one-line if", ->
       beforeEach ->
-        prepare('one-line-if.rb')
+        prepare("one-line-if.rb")
 
       it "ignores them", ->
         expect(_.keys(map).length).toBe 2
         expect(map[0][0].parameters.keyword).toBe "begin"
+        expect(map[1]).toBe undefined
+        expect(map[2][0].parameters.keyword).toBe "end"
+
+      describe "with assignment", ->
+        beforeEach ->
+          prepare("one-line-if-with-assignment.rb")
+
+        it "ignores them", ->
+          expect(_.keys(map).length).toBe 2
+          expect(map[0][0].parameters.keyword).toBe "def"
+          expect(map[1]).toBe undefined
+          expect(map[2][0].parameters.keyword).toBe "end"
+
+    describe "assignment with if", ->
+      beforeEach ->
+        prepare("assignment-with-if.rb")
+
+      it "doesnt ignore them", ->
+        expect(_.keys(map).length).toBe 5
+        expect(map[1][10].parameters.keyword).toBe "if"
+        expect(map[3][2].parameters.keyword).toBe "else"
+        expect(map[5][2].parameters.keyword).toBe "end"
+
+  describe "unless statements", ->
+    describe "basic unless", ->
+      beforeEach ->
+        prepare("basic-unless.rb")
+
+      it "finds them", ->
+        expect(_.keys(map).length).toBe 2
+        expect(map[0][2].parameters.keyword).toBe "unless"
+        expect(map[1]).toBe undefined
+        expect(map[2][2].parameters.keyword).toBe "end"
+
+    describe "one-line unless", ->
+      beforeEach ->
+        prepare("one-line-unless.rb")
+
+      it "ignores them", ->
+        expect(_.keys(map).length).toBe 2
+        expect(map[0][0].parameters.keyword).toBe "begin"
+        expect(map[1]).toBe undefined
+        expect(map[2][0].parameters.keyword).toBe "end"
+
+      describe "with assignment", ->
+        beforeEach ->
+          prepare("one-line-unless-with-assignment.rb")
+
+        it "ignores them", ->
+          expect(_.keys(map).length).toBe 2
+          expect(map[0][0].parameters.keyword).toBe "def"
+          expect(map[1]).toBe undefined
+          expect(map[2][0].parameters.keyword).toBe "end"
+
+    describe "assignment with unless", ->
+      beforeEach ->
+        prepare("assignment-with-unless.rb")
+
+      it "doesnt ignore them", ->
+        expect(_.keys(map).length).toBe 5
+        expect(map[1][10].parameters.keyword).toBe "unless"
+        expect(map[3][2].parameters.keyword).toBe "else"
+        expect(map[5][2].parameters.keyword).toBe "end"
+
+  describe "rescue statements", ->
+    describe "one-line rescue", ->
+      beforeEach ->
+        prepare("one-line-rescue.rb")
+
+      it "ignores them", ->
+        expect(_.keys(map).length).toBe 2
+        expect(map[0][0].parameters.keyword).toBe "def"
+        expect(map[1]).toBe undefined
+        expect(map[2]).toBe undefined
+        expect(map[3][0].parameters.keyword).toBe "end"
+
+  describe "do-blocks", ->
+    describe "with parameters", ->
+      beforeEach ->
+        prepare("do-block-with-parameters.rb")
+
+      it "finds them", ->
+        expect(_.keys(map).length).toBe 2
+        expect(map[0][10].parameters.keyword).toBe "do"
         expect(map[1]).toBe undefined
         expect(map[2][0].parameters.keyword).toBe "end"

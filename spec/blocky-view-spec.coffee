@@ -5,21 +5,25 @@ _ = require 'underscore-plus'
 Blocky = require '../lib/blocky'
 
 describe "BlockyView", ->
-  [editor] = []
+  [editor, editorElement] = []
 
   fullyTokenize = (tokenizedBuffer) ->
     tokenizedBuffer.setVisible(true)
     advanceClock() while tokenizedBuffer.firstInvalidRow()?
+    # Hack: for some reason, did-tokenize is not emittet in the specs.
+    # Maybe this line can be removed in the future.
+    tokenizedBuffer.emitter.emit "did-tokenize"
 
   prepare = (fileName) ->
     waitsForPromise ->
       atom.workspace.open(fileName)
     runs ->
       editor = atom.workspace.getActiveTextEditor()
-      fullyTokenize(editor.displayBuffer.tokenizedBuffer)
+      editorElement = atom.views.getView(editor)
+      fullyTokenize(editor.tokenizedBuffer)
 
   beforeEach ->
-    [editor] = []
+    [editor, editorElement] = []
     waitsForPromise ->
       atom.packages.activatePackage("language-ruby")
     waitsForPromise ->
@@ -75,3 +79,12 @@ describe "BlockyView", ->
       expectHighlights(1, 2, 3)
       expectHighlights(3, 2, 6)
       expectHighlights(5, 2, 3)
+
+  describe "expandSelection", ->
+    beforeEach ->
+      prepare('big.rb')
+
+    it "expands the selection", ->
+      editor.setCursorBufferPosition([5, 6])
+      atom.commands.dispatch(editorElement, "blocky:expand-selection")
+      expect(editor.getSelectedBufferRange()).toEqual [[3, 6], [9, 9]]

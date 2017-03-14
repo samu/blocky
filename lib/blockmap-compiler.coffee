@@ -1,7 +1,8 @@
-openKeywords = /begin|case|class|def|do|for|module|unless|while/
-ifKeyword = /if/
-intermediateKeywords = /break|else|elsif|ensure|next|rescue|return/
-endKeyword = /end/
+openKeywords = /^(begin|case|class|def|do ?|for|module|while)$/
+ifOrUnlessKeyword = /if|unless/
+intermediateKeywords = /else|elsif|ensure/
+notInlineRescue = /^\s*rescue/
+endKeyword = /^end$/
 
 class Parameters
   constructor: (@keyword, @lineNumber, @position, @length) ->
@@ -15,7 +16,7 @@ class BlockMap
 
   putEntry: (parameters, block) ->
     @entryAt(parameters.lineNumber)[parameters.position] =
-      {parameters, appendants: block.getAppendants(parameters.lineNumber)}
+      {block, parameters, appendants: block.getAppendants(parameters.lineNumber)}
 
   push: (block) ->
     @putEntry(block.begin, block)
@@ -45,19 +46,20 @@ class Block
 
 class Stack
   constructor: (@blockMap) ->
-    invisiblesSpace = atom.config.get('editor.invisibles.space')
-    @invisiblesRegex = new RegExp("^#{invisiblesSpace}*if")
+    keywordPrecededByWhitespace = "^\\s*(if|unless)"
+    keywordAsAnAssignment = "^.+=\\s+(if|unless)"
+    @isKeywordWithAppendants = new RegExp("(#{keywordPrecededByWhitespace})|(#{keywordAsAnAssignment})")
     @stack = []
 
   push: (parameters, line) ->
     # TODO
     # this handles the intermediates first, because of the if that also appears
     # in elsif. maybe this should be taken care of with a more specific regex.
-    if intermediateKeywords.test(parameters.keyword)
+    if intermediateKeywords.test(parameters.keyword) || notInlineRescue.test(line)
       @getTop()?.pushInbetween(parameters)
 
-    else if ifKeyword.test(parameters.keyword)
-      if @invisiblesRegex.test(line.text)
+    else if ifOrUnlessKeyword.test(parameters.keyword)
+      if @isKeywordWithAppendants.test(line)
         @stack.push(new Block(parameters))
 
     else if openKeywords.test(parameters.keyword)
@@ -79,15 +81,15 @@ getPositionAndLength = (tags, index) ->
     counter++
   return [position, tags[counter]]
 
-module.exports = (lines) ->
+module.exports = (buffer, tokenizedLines) ->
   blockMap = new BlockMap()
   stack = new Stack(blockMap)
-  for line, lineNumber in lines
+  for line, lineNumber in tokenizedLines
     tags = line.tags.filter (n) -> n >= 0
     for token, index in line.tokens
       for scope in token.scopes
         if scope.indexOf("keyword") >= 0
           [position, length] = getPositionAndLength(tags, index)
-          stack.push(new Parameters(token.value, lineNumber, position, length), line)
+          stack.push(new Parameters(token.value, lineNumber, position, length), buffer.lineForRow(lineNumber))
 
   return blockMap.map
