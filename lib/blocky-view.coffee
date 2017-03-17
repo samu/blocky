@@ -60,7 +60,6 @@ class BlockyView
   notifyChangeCursorPosition: ->
     @destroyMarkers()
     cursorPosition = @editor.getCursorBufferPosition()
-    if !@blockMap return
     entries = @blockMap[cursorPosition.row]
     if entries
       for entry in entries
