@@ -85,8 +85,8 @@ module.exports = (buffer, tokenizedLines) ->
   blockMap = new BlockMap()
   stack = new Stack(blockMap)
   for line, lineNumber in tokenizedLines
-    tags = line && line.tags && (line.tags.filter (n) -> n >= 0)
-    break if !tags
+    break if !line
+    tags = line.tags.filter (n) -> n >= 0
     for token, index in line.tokens
       for scope in token.scopes
         if scope.indexOf("keyword") >= 0

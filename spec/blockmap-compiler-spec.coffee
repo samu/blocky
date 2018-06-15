@@ -10,7 +10,6 @@ describe "compile", ->
   [editor, editorView, map] = []
 
   fullyTokenize = (tokenizedBuffer) ->
-    tokenizedBuffer.setVisible(true)
     advanceClock() while tokenizedBuffer.firstInvalidRow()?
 
   prepare = (fileName) ->
