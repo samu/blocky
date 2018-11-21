@@ -1,5 +1,5 @@
 openKeywords = /^(begin|case|class|def|do ?|for|module|while)$/
-ifOrUnlessKeyword = /if|unless/
+ifOrUnlessKeyword = /^if|unless$/
 intermediateKeywords = /else|elsif|ensure/
 notInlineRescue = /^\s*rescue/
 endKeyword = /^end$/
@@ -73,24 +73,21 @@ class Stack
   getTop: ->
     @stack[@stack.length-1]
 
-getPositionAndLength = (tags, index) ->
-  counter = 0
-  position = 0
-  while counter < index
-    position += tags[counter]
-    counter++
-  return [position, tags[counter]]
+fromLineInfo = (editor, lineInfo) ->
+  buffer = editor.getBuffer()
 
-module.exports = (buffer, tokenizedLines) ->
   blockMap = new BlockMap()
   stack = new Stack(blockMap)
-  for line, lineNumber in tokenizedLines
-    break if !line
-    tags = line.tags.filter (n) -> n >= 0
-    for token, index in line.tokens
-      for scope in token.scopes
-        if scope.indexOf("keyword") >= 0
-          [position, length] = getPositionAndLength(tags, index)
-          stack.push(new Parameters(token.value, lineNumber, position, length), buffer.lineForRow(lineNumber))
+
+  for line in lineInfo
+    stack.push(new Parameters(line.keyword, line.row, line.position, line.length), buffer.lineForRow(line.row))
 
   return blockMap.map
+
+keywordRegexes = [openKeywords, ifOrUnlessKeyword, intermediateKeywords, notInlineRescue, endKeyword]
+
+isRelevantKeyword = (keyword) ->
+  keywordRegexes.some((regex) => regex.test(keyword))
+
+module.exports.fromLineInfo = fromLineInfo
+module.exports.isRelevantKeyword = isRelevantKeyword

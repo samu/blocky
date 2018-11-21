@@ -3,23 +3,17 @@ fs = require 'fs-plus'
 temp = require 'temp'
 _ = require 'underscore-plus'
 Blocky = require '../lib/blocky'
-compile = require '../lib/blockmap-compiler'
+{getBlockmapCompilationStrategy} = require '../lib/get-blockmap-compilation-strategy'
 
 describe "compile", ->
-  # [workspaceElement, activationPromise] = []
   [editor, editorView, map] = []
-
-  fullyTokenize = (tokenizedBuffer) ->
-    advanceClock() while tokenizedBuffer.firstInvalidRow()?
 
   prepare = (fileName) ->
     waitsForPromise ->
       atom.workspace.open(fileName)
     runs ->
       editor = atom.workspace.getActiveTextEditor()
-      fullyTokenize(editor.tokenizedBuffer)
-      lines = editor.tokenizedBuffer.tokenizedLines
-      map = compile(editor.buffer, lines)
+      map = getBlockmapCompilationStrategy(editor)(editor)
 
   beforeEach ->
     [editor, editorView, map] = []

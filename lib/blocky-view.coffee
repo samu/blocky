@@ -1,5 +1,5 @@
-compileBlockMap = require './blockmap-compiler'
 {CompositeDisposable, Range} = require 'atom'
+{getBlockmapCompilationStrategy, hasSyntaxTree} = require './get-blockmap-compilation-strategy'
 
 module.exports =
 class BlockyView
@@ -10,14 +10,20 @@ class BlockyView
 
     @subscriptions.add(@editor.onDidStopChanging(=> @notifyContentsModified()))
 
-    @subscriptions.add(@editor.onDidTokenize(=>
-      @notifyContentsModified()
-      @notifyChangeCursorPosition()
-    ))
-
     @subscriptions.add(@editor.onDidChangeCursorPosition(=> @notifyChangeCursorPosition()))
 
     @subscriptions.add(atom.commands.add(editorElement, 'blocky:expand-selection', => @expandSelection()))
+
+    @blockmapCompilationStrategy = getBlockmapCompilationStrategy(@editor)
+
+    if hasSyntaxTree(@editor)
+      @notifyContentsModified()
+      @notifyChangeCursorPosition()
+    else
+      @subscriptions.add(@editor.onDidTokenize(=>
+        @notifyContentsModified()
+        @notifyChangeCursorPosition()
+      ))
 
   destroy: ->
     @subscriptions.dispose()
@@ -27,8 +33,7 @@ class BlockyView
     marker.destroy() for marker in @markers
 
   notifyContentsModified: ->
-    tokenizedLines = @editor.tokenizedBuffer.tokenizedLines
-    @blockMap = compileBlockMap(@editor.getBuffer(), tokenizedLines)
+    @blockMap = @blockmapCompilationStrategy(@editor)
 
   findCurrentBlock: (cursorPosition) ->
     row = cursorPosition.row
@@ -60,6 +65,7 @@ class BlockyView
   notifyChangeCursorPosition: ->
     @destroyMarkers()
     cursorPosition = @editor.getCursorBufferPosition()
+
     entries = @blockMap[cursorPosition.row]
     if entries
       for entry in entries

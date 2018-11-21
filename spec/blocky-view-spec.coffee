@@ -7,19 +7,12 @@ Blocky = require '../lib/blocky'
 describe "BlockyView", ->
   [editor, editorElement] = []
 
-  fullyTokenize = (tokenizedBuffer) ->
-    advanceClock() while tokenizedBuffer.firstInvalidRow()?
-    # Hack: for some reason, did-tokenize is not emittet in the specs.
-    # Maybe this line can be removed in the future.
-    tokenizedBuffer.emitter.emit "did-tokenize"
-
   prepare = (fileName) ->
     waitsForPromise ->
       atom.workspace.open(fileName)
     runs ->
       editor = atom.workspace.getActiveTextEditor()
       editorElement = atom.views.getView(editor)
-      fullyTokenize(editor.tokenizedBuffer)
 
   beforeEach ->
     [editor, editorElement] = []
