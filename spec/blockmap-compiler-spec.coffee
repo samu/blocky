@@ -6,21 +6,24 @@ Blocky = require '../lib/blocky'
 {getBlockmapCompilationStrategy} = require '../lib/get-blockmap-compilation-strategy'
 
 describe "compile", ->
-  [editor, editorView, map] = []
+  [editor, map] = []
+
+  beforeEach ->
+    jasmine.useRealClock()
+
+    waitsForPromise ->
+      atom.packages.activatePackage("language-ruby")
+
+    waitsForPromise ->
+      atom.packages.activatePackage("blocky")
 
   prepare = (fileName) ->
     waitsForPromise ->
-      atom.workspace.open(fileName)
-    runs ->
-      editor = atom.workspace.getActiveTextEditor()
-      map = getBlockmapCompilationStrategy(editor)(editor)
+      atom.workspace.open(fileName).then (_editor) ->
+        editor = _editor
 
-  beforeEach ->
-    [editor, editorView, map] = []
-
-  beforeEach ->
-    waitsForPromise ->
-      atom.packages.activatePackage("language-ruby")
+        waitsForPromise ->
+          getBlockmapCompilationStrategy(editor)(editor).then((result) => map = result)
 
   describe "basic case", ->
     beforeEach ->

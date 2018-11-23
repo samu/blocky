@@ -22,6 +22,8 @@ compileBlockMapWithTokenizedBuffer = (editor) ->
 
           lineInfo.push({keyword: token.value, row: lineNumber, position: position, length: length})
 
-  return fromLineInfo(editor, lineInfo)
+  return new Promise((resolve) =>
+    resolve(fromLineInfo(editor, lineInfo))
+  )
 
 module.exports.compileBlockMapWithTokenizedBuffer = compileBlockMapWithTokenizedBuffer

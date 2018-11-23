@@ -32,6 +32,10 @@ getLineInfo = (editor) ->
   return acc
 
 compileBlockmapWithTreeSitter = (editor) ->
-  return fromLineInfo(editor, getLineInfo(editor))
+  return new Promise((resolve) =>
+    editor.buffer.getLanguageMode().parseCompletePromise().then(() =>
+      resolve(fromLineInfo(editor, getLineInfo(editor)))
+    )
+  )
 
 module.exports.compileBlockmapWithTreeSitter = compileBlockmapWithTreeSitter
