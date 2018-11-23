@@ -7,19 +7,23 @@ Blocky = require '../lib/blocky'
 describe "BlockyView", ->
   [editor, editorElement] = []
 
-  prepare = (fileName) ->
-    waitsForPromise ->
-      atom.workspace.open(fileName)
-    runs ->
-      editor = atom.workspace.getActiveTextEditor()
-      editorElement = atom.views.getView(editor)
-
   beforeEach ->
-    [editor, editorElement] = []
+    jasmine.useRealClock()
+
     waitsForPromise ->
       atom.packages.activatePackage("language-ruby")
+
     waitsForPromise ->
       atom.packages.activatePackage("blocky")
+
+  prepare = (fileName) ->
+    waitsForPromise ->
+      atom.workspace.open(fileName).then (_editor) ->
+        editor = _editor
+        editorElement = atom.views.getView(editor)
+
+        waitsForPromise ->
+          editor.buffer.getLanguageMode().parseCompletePromise()
 
   describe "basic case", ->
     expectNoHighlights = ->

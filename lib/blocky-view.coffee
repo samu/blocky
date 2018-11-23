@@ -8,21 +8,24 @@ class BlockyView
     @markers = []
     @subscriptions = new CompositeDisposable
 
-    @subscriptions.add(@editor.onDidStopChanging(=> @notifyContentsModified()))
+    @subscriptions.add(@editor.onDidStopChanging(=>
+      @notifyContentsModified().then =>
+        @notifyChangeCursorPosition()
+      ))
 
     @subscriptions.add(@editor.onDidChangeCursorPosition(=> @notifyChangeCursorPosition()))
 
     @subscriptions.add(atom.commands.add(editorElement, 'blocky:expand-selection', => @expandSelection()))
 
-    @blockmapCompilationStrategy = getBlockmapCompilationStrategy(@editor)
+    @compileBlockMap = getBlockmapCompilationStrategy(@editor)
 
     if hasSyntaxTree(@editor)
-      @notifyContentsModified()
-      @notifyChangeCursorPosition()
+      @notifyContentsModified().then =>
+        @notifyChangeCursorPosition()
     else
       @subscriptions.add(@editor.onDidTokenize(=>
-        @notifyContentsModified()
-        @notifyChangeCursorPosition()
+        @notifyContentsModified().then =>
+          @notifyChangeCursorPosition()
       ))
 
   destroy: ->
@@ -33,7 +36,7 @@ class BlockyView
     marker.destroy() for marker in @markers
 
   notifyContentsModified: ->
-    @blockMap = @blockmapCompilationStrategy(@editor)
+    @compileBlockMap(@editor).then((result) => @blockMap = result)
 
   findCurrentBlock: (cursorPosition) ->
     row = cursorPosition.row
